@@ -1,0 +1,51 @@
+{
+  "colors": {
+    "textColor": "#483d23",
+    "primaryColor": "#ffc70d",
+    "burstColor": "#5000ff",
+    "blastWaveColor": "#ffc70d",
+    "starStreamColor": "#fae467",
+    "backgroundColor": "#4ebefd"
+  },
+  "@@editor": [
+    {
+      "key": "colors",
+      "name": "Colors",
+      "icon": "💅",
+      "source": "colors.json",
+      "fields": [
+        {
+          "key": "textColor",
+          "name": "Text color",
+          "description": "Default color for text",
+          "type": "color"
+        },
+        {
+          "key": "primaryColor",
+          "name": "Primary Color",
+          "type": "color"
+        },
+        {
+          "key": "burstColor",
+          "name": "Burst Color",
+          "type": "color"
+        },
+        {
+          "key": "blastWaveColor",
+          "name": "Blast Wave Color",
+          "type": "color"
+        },
+        {
+          "key": "starStreamColor",
+          "name": "Star Stream Color",
+          "type": "color"
+        },
+        {
+          "key": "backgroundColor",
+          "name": "Background color",
+          "type": "color"
+        }
+      ]
+    }
+  ]
+}

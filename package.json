@@ -1,0 +1,31 @@
+{
+  "name": "vertical",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npx koji-tools watch &",
+    "start": "npm run dev",
+    "dev": "npx parcel index.html",
+    "build": "npx parcel build index.html",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postbuild": "npx koji-tools pwa"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "audio-context": "^1.0.3",
+    "audio-play": "^2.2.1",
+    "color-convert": "^2.0.0",
+    "game-asset-loader": "0.0.3",
+    "koji-tools": "^0.5.2",
+    "parcel-bundler": "^1.12.3",
+    "prevent-parent": "0.0.2",
+    "unlock-audio-context": "^0.2.4",
+    "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
