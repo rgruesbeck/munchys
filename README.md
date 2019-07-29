@@ -6,8 +6,6 @@ A vertical obstacle game.
 
 - 🎮 Change the text and game settings
     * [Open configuration](#~/.koji/customization/settings.json!visual)
-- 🎮 Set lane style game play settings: number of lanes, max width.
-    * [Open configuration](#~/.koji/customization/laneplay.json!visual)
 - 🎮 Set open style game play settings player size obstacle size.
     * [Open configuration](#~/.koji/customization/openplay.json!visual)
 - 🖼️ Replace the player, background and more

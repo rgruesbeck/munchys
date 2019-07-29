@@ -18,7 +18,6 @@ class Obstacle extends ImageSprite {
         super(options);
 
         this.active = true;
-        this.lane = options.lane;
         this.bounds = {
             top: -200,
             right: 2000,

@@ -79,14 +79,8 @@ class Game {
         this.topbar = topbar;
         this.topbar.active = config.settings.gameTopBar;
 
-	// prevent parent wondow form scrolling
-	preventParent();
-
-        // set playstyle: lanes or open
-        this.playStyle = "openplay";
-        this.gamePlay = {
-            ...config[this.playStyle]
-        };
+        // prevent parent window form scrolling
+        preventParent();
 
         this.prefix = hashCode(this.config.settings.name); // set prefix for local-storage keys
 
@@ -132,8 +126,7 @@ class Game {
 
     init() {
         // set canvas
-        // this.canvas.width = window.innerWidth; // set game screen width
-        this.canvas.width = this.gamePlay.maxWidth ? Math.min(window.innerWidth, this.gamePlay.maxWidth) : window.innerWidth; // set game screen width
+        this.canvas.width = window.innerWidth; // set game screen width
         this.canvas.height = this.topbar.active ? window.innerHeight - this.topbar.clientHeight : window.innerHeight; // set game screen height
 
         // frame count, rate, and time
@@ -146,11 +139,14 @@ class Game {
         };
 
         // game settings
+        this.playerSize = parseInt(this.config.settings.playerSize);
+        this.obstacleSize = parseInt(this.config.settings.obstacleSize);
+
         this.state = {
             current: 'loading',
             prev: '',
-            gameSpeed: parseInt(this.config.settings.gameSpeed),
             score: 0,
+            gameSpeed: parseInt(this.config.settings.gameSpeed),
             lives: parseInt(this.config.settings.lives),
             paused: false,
             muted: localStorage.getItem(this.prefix.concat('muted')) === 'true'
@@ -238,10 +234,10 @@ class Game {
         const { playerImage, obstacleImage } = this.images;
 
         // set player size
-        let playerWidthOpen = bounded(this.gamePlay.playerSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
+        let playerWidth = bounded(this.playerSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
         this.playerSize = resize({
             image: playerImage,
-            width: playerWidthOpen
+            width: playerWidth
         });
 
 
@@ -259,7 +255,7 @@ class Game {
         });
 
         // set obstacle size
-        let obstacleWidthOpen = bounded(this.gamePlay.obstacleSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
+        let obstacleWidthOpen = bounded(this.obstacleSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
         this.obstacleSize = resize({
             image: obstacleImage,
             width: obstacleWidthOpen
@@ -354,11 +350,8 @@ class Game {
 
             if (shouldAddObstacle) {
                 // pick a location
-                let obstacleLane = randomBetween(0, this.state.lanes - 1, true);
                 let location = {
-                    x: this.gamePlay.lanes ?
-                    this.state.laneSize * obstacleLane :
-                    randomBetween(0, this.screen.right - this.obstacleSize.width, true),
+                    x: randomBetween(0, this.screen.right - this.obstacleSize.width, true),
                     y: -200
                 };
 
@@ -373,13 +366,12 @@ class Game {
                     let { obstacleImage } = this.images;
                     let obstacleSize = resize({
                         image: obstacleImage,
-                        width: this.gamePlay.lanes ? this.state.laneSize : this.obstacleSize.width
+                        width: this.obstacleSize.width
                     });
 
                     this.entities.push(new Obstacle({
                         ctx: this.ctx,
                         image: obstacleImage,
-                        lane: this.gamePlay.lanes ? obstacleLane : null,
                         x: location.x,
                         y: location.y,
                         width: obstacleSize.width,
@@ -507,17 +499,11 @@ class Game {
 
             // move player: open play
             let { left, right } = this.input;
-            let opendx = this.gamePlay.lanes ?
-            0 : (left ? -1 : 0) + (right ? 1 : 0);
-
-            // move player: lane play
-            let lanedx = this.gamePlay.lanes ?
-            this.state.playerLane * this.state.laneSize : null;
+            let dx = (left ? -1 : 0) + (right ? 1 : 0);
 
             // apply movement
-            this.player.move(opendx, dy, this.frame.scale);
+            this.player.move(dx, dy, this.frame.scale);
             this.player.moveTo({
-                x: lanedx,
                 y: this.screen.bottom - this.player.height
             }); 
             this.player.draw();
@@ -551,24 +537,6 @@ class Game {
         this.requestFrame(() => this.play());
     }
 
-    shiftRight() {
-        // right
-        this.setState({
-            playerLane: Math.min(this.state.playerLane + 1, this.state.lanes - 1)
-        });
-
-        this.playback('turnSound', this.sounds.turnSound);
-    }
-
-    shiftLeft() {
-        // left
-        this.setState({
-            playerLane: Math.max(this.state.playerLane - 1, 0)
-        });
-
-        this.playback('turnSound', this.sounds.turnSound);
-    }
-
     // event listeners
     handleClicks(e) {
         if (this.state.current === 'loading') { return; }
@@ -591,12 +559,6 @@ class Game {
             this.setState({ current: 'play' });
         }
 
-        /*
-        console.log('----- snapshot -----');
-        console.log(this.effects);
-        console.log(this.entities);
-        console.log(this.player);
-        */
     }
 
     handleKeyboardInput(type, code) {
@@ -612,11 +574,9 @@ class Game {
         if (type === 'keyup' && this.state.current === 'play') {
             if (code === 'ArrowRight') {
                 this.input.right = false;
-                this.shiftRight();
             }
             if (code === 'ArrowLeft') {
                 this.input.left = false;
-                this.shiftLeft();
             }
 
             if (code === 'Space') {
@@ -641,21 +601,17 @@ class Game {
         // ignore for first 1 second
         if (this.frame.count < 60) { return; }
 
-        // shift right for right of player taps
-        // shift left for left of player taps
         if (type === 'start') {
             let location = canvasInputPosition(this.canvas, e.touches[0]);
 
             if (location.x > this.screen.centerX) {
                 this.input.right = true;
                 this.input.left = false;
-                this.shiftRight();
             }
 
             if (location.x < this.screen.centerX) {
                 this.input.left = true;
                 this.input.right = false;
-                this.shiftLeft();
             }
         }
 
