@@ -33,8 +33,8 @@ class Overlay {
         this.button = node.querySelector('#button');
         this.instructions = node.querySelector('#instructions');
 
-        this.score = node.querySelector('#score');
         this.lives = node.querySelector('#lives');
+        this.score = node.querySelector('#score');
         this.mute = node.querySelector('#mute');
         this.pause = node.querySelector('#pause');
 

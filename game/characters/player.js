@@ -35,7 +35,7 @@ class Player extends ImageSprite {
         // eat food
         this.width += 1;
         this.height += 1;
-
+        this.radius = (this.width + this.height) / 4;
 
         this.update();
     }

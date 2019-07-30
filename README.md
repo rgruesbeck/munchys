@@ -1,6 +1,6 @@
-# Munchies
+# Munchys
 
-A vertical munchie game.
+A vertical munching game.
 
 # VCC's
 
@@ -53,9 +53,3 @@ If you need any help, you can ask the community by [making a post](https://gokoj
 ### Helpful Resources
 - [Mozilla Game Development Docs](https://developer.mozilla.org/en-US/docs/Games).
 - [HTML5 Game Devs Forum](http://www.html5gamedevs.com/).
-
-### TODO
-- fix collision
-- glowing pizza
-- fix double background track
-- background resize

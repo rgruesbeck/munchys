@@ -92,7 +92,6 @@ class Game {
         this.playlist = [];
 
         // setup throttled functions
-        this.decrementLife = throttled(300, () => this.state.lives -= 1);
         this.throttledBlastWave = throttled(600, (bw) => new BlastWave(bw));
         this.throttledBurst = throttled(300, (br) => new Burst(br));
         this.throttledPlayback = throttled(300, (key, buffer) => this.playback(key, buffer));
@@ -104,7 +103,6 @@ class Game {
 
         // handle taps
         document.addEventListener('touchstart', (e) => this.handleTap('start', e));
-        document.addEventListener('touchend', (e) => this.handleTap('end', e));
 
         // handle overlay clicks
         this.overlay.root.addEventListener('click', (e) => this.handleClicks(e));
@@ -148,7 +146,6 @@ class Game {
             prev: '',
             score: 0,
             gameSpeed: parseInt(this.config.settings.gameSpeed),
-            lives: parseInt(this.config.settings.lives),
             paused: false,
             muted: localStorage.getItem(this.prefix.concat('muted')) === 'true'
         };
@@ -301,8 +298,7 @@ class Game {
         // no matter the game state
         this.ctx.drawImage(this.images.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
 
-        // update score and lives
-        this.overlay.setLives(this.state.lives);
+        // update score
         this.overlay.setScore(this.state.score);
 
         // ready to play
@@ -341,14 +337,8 @@ class Game {
                 this.setState({ current: 'play' });
             }
 
-            if (!this.state.muted && !this.state.backgroundMusic) {
-                let sound = this.sounds.backgroundMusic;
-                this.state.backgroundMusic = audioPlayback(sound, {
-                    start: 0,
-                    end: sound.duration,
-                    loop: true,
-                    context: this.audioCtx
-                });
+            if (!this.state.muted && this.playlist.length === 0) {
+                this.playback('backgroundMusic', this.sounds.backgroundMusic, { loop: true })
             }
 
 
@@ -429,8 +419,9 @@ class Game {
 
             for (let i = 0; i < this.entities.length; i++) {
                 let entity = this.entities[i];
+                let dx = Math.cos(this.frame.count / 60) / 6;
 
-                entity.move(0, 1, this.frame.scale);
+                entity.move(dx, 1, this.frame.scale);
                 entity.draw();
 
                 // check for player collisions
@@ -440,8 +431,7 @@ class Game {
                     
                     // add points & increase game speed
                     this.setState({
-                        score: this.state.score + 1,
-                        gameSpeed: this.state.gameSpeed + 0.1
+                        score: this.state.score + 1
                     });
 
                     // eat
@@ -509,6 +499,7 @@ class Game {
                 );
 
                 this.playback('gameOverSound', this.sounds.gameOverSound);
+                this.stopPlayback('backgroundMusic');
 
                 // game over
                 this.setState({ current: 'over' });
@@ -548,6 +539,7 @@ class Game {
             }
 
             if (this.effects.length === 1) {
+                this.playlist = [];
                 setTimeout(this.load(), 2000);
             }
 
@@ -579,6 +571,32 @@ class Game {
             this.setState({ current: 'play' });
         }
 
+    }
+
+    handleTap(type, e) {
+        // ignore for first 1 second
+        if (this.frame.count < 60) { return; }
+
+        // shift right for right of player taps
+        // shift left for left of player taps
+        if (type === 'start') {
+            let location = canvasInputPosition(this.canvas, e.touches[0]);
+
+            if (location.x > this.screen.centerX) {
+                this.input.right = true;
+                this.input.left = false;
+            }
+
+            if (location.x < this.screen.centerX) {
+                this.input.left = true;
+                this.input.right = false;
+            }
+        }
+
+        if (type === 'end') {
+            this.input.right = false;
+            this.input.left = false;
+        }
     }
 
     handleKeyboardInput(type, code) {
@@ -615,30 +633,6 @@ class Game {
             this.effects.length === 1 && this.load();
         }
 
-    }
-
-    handleTap(type, e) {
-        // ignore for first 1 second
-        if (this.frame.count < 60) { return; }
-
-        if (type === 'start') {
-            let location = canvasInputPosition(this.canvas, e.touches[0]);
-
-            if (location.x > this.screen.centerX) {
-                this.input.right = true;
-                this.input.left = false;
-            }
-
-            if (location.x < this.screen.centerX) {
-                this.input.left = true;
-                this.input.right = false;
-            }
-        }
-
-        if (type === 'end') {
-            this.input.right = false;
-            this.input.left = false;
-        }
     }
 
     handleResize() {

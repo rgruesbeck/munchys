@@ -101,7 +101,7 @@ const pickLocationAwayFromList = (bounds, list, distance, depth = 0, maxDepth = 
 // detect collision based on distance
 // between point a and b
 const collideDistance = (a, b) => {
-    let distance = getDistance(a, b);
+    let distance = getDistance({ x: a.cx, y: a.cy }, { x: b.cx, y: b.cy });
     return distance < (a.radius + b.radius);
 }
 

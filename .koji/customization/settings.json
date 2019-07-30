@@ -3,11 +3,10 @@
     "name": "Munchys",
     "startText": "Start",
     "gameoverText": "Game Over",
-    "instructionsMobile": "Tap left and right to avoid obstacles",
-    "instructionsDesktop": "Use arrow keys to avoid obstacles: [ ⇠ ⇢ ]",
+    "instructionsMobile": "Eat as much as you can, but not too much. <br> Tap left and right to move",
+    "instructionsDesktop": "Eat as much as you can, but not too much. <br> Use arrow keys to move: [ ⇠ ⇢ ]",
     "gameTopBar": false,
-    "gameSpeed": 70,
-    "lives": 3,
+    "gameSpeed": 50,
     "playerSize": 150,
     "obstacleSize": 150,
     "fontFamily": "Fascinate"
@@ -46,10 +45,6 @@
         "key": "gameTopBar",
         "name": "If game should have a top bar or not",
         "type": "boolean"
-      },
-      {
-        "key": "lives",
-        "name": "How many lives a character has"
       },
       {
           "key": "playerSize",

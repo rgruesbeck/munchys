@@ -3,7 +3,7 @@
     "backgroundMusic": "https://objects.koji-cdn.com/26679afd-cce2-4339-8d5c-e442210d9401/background.mp3",
     "munchSound": "https://objects.koji-cdn.com/136bcc54-d0f5-4618-8ba9-3f771afe878b/pick.mp3",
     "clearSound": "https://objects.koji-cdn.com/eedc4ffb-7d04-464e-8c92-f5291d76f048/sparkle.mp3",
-    "gameOverSound": "https://objects.koji-cdn.com/136bcc54-d0f5-4618-8ba9-3f771afe878b/gameover.mp3"
+    "gameOverSound": "https://objects.koji-cdn.com/eedc4ffb-7d04-464e-8c92-f5291d76f048/sparkle.mp3"
   },
   "@@editor": [
     {
