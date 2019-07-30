@@ -11,6 +11,7 @@
  * 
  */
 
+import { bounded } from '../utils/baseUtils.js';
 import ImageSprite from '../objects/imageSprite.js';
 
 class Player extends ImageSprite {
@@ -27,7 +28,7 @@ class Player extends ImageSprite {
         // update player image
         let max = this.ctx.canvas.width / 2; // get max player width
         let i = (this.width / max) * this.images.length; // get index matching width
-        let idx = Math.min(Math.round(i) - 1, this.images.length - 1); // limit index
+        let idx = bounded(Math.round(i) - 1, 0, this.images.length - 1)
         this.image = this.images[idx]; // set player image
     }
 
