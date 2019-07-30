@@ -1,11 +1,11 @@
 {
   "colors": {
-    "textColor": "#483d23",
-    "primaryColor": "#ffc70d",
+    "textColor": "#ffc70d",
+    "primaryColor": "#37289f",
     "burstColor": "#5000ff",
     "blastWaveColor": "#ffc70d",
     "starStreamColor": "#fae467",
-    "backgroundColor": "#4ebefd"
+    "backgroundColor": "#080e32"
   },
   "@@editor": [
     {

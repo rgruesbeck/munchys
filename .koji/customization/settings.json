@@ -10,7 +10,7 @@
     "lives": 3,
     "playerSize": 150,
     "obstacleSize": 150,
-    "fontFamily": "Bonbon"
+    "fontFamily": "Fascinate"
   },
   "@@editor": [{
     "key": "settings",

@@ -17,13 +17,19 @@ class Obstacle extends ImageSprite {
     constructor(options) {
         super(options);
 
+        this.type = options.type;
         this.active = true;
+        this.munches = 0;
         this.bounds = {
             top: -200,
             right: 2000,
             left: -200,
             bottom: 2000
         };
+    }
+
+    munch() {
+        this.munches += 1;
     }
 
     collisionsWith(entities) {

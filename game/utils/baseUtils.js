@@ -38,6 +38,14 @@ const valueOrRange = (vr) => {
     return Array.isArray(vr) ? randomBetween(vr[0], vr[1], true) : vr;
 }
 
+// pick random element from a list
+const pickFromList = (list) => {
+    if (!Array.isArray(list) || list.length < 1) { return; }
+
+    let index = randomBetween(0, list.length - 1, 'int');
+    return list[index];
+}
+
 // apply a lower and upper bound to a number
 const bounded = (n, min, max) => {
     return [n]
@@ -134,6 +142,7 @@ export {
     findIn,
     hexToRgbA,
     randomBetween,
+    pickFromList,
     valueOrRange,
     hashCode,
     throttled

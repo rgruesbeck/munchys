@@ -1,10 +1,16 @@
 {
   "images": {
-    "playerImage": "https://i.imgur.com/OMyDdg5.png",
-    "obstacleImage": "https://i.imgur.com/JBkWfMw.png",
+    "dizzyFaceImage": "https://i.imgur.com/dAkoMtz.png",
+    "happyFaceImage": "https://i.imgur.com/OMyDdg5.png",
+    "hungryFaceImage": "https://i.imgur.com/q7rCRXQ.png",
+    "fullFaceImage": "https://i.imgur.com/OuXCWYj.png",
+    "sickFaceImage": "https://i.imgur.com/caOMfhO.png",
     "foodImage1": "https://i.imgur.com/JBkWfMw.png",
-    "foodImage2": "https://i.imgur.com/JBkWfMw.png",
-    "backgroundImage": "https://i.imgur.com/Pc4JkFg.png"
+    "foodImage2": "https://i.imgur.com/DJhaQFQ.png",
+    "foodImage3": "https://i.imgur.com/sSUhX8Y.png",
+    "foodImage4": "https://i.imgur.com/H6SCT32.png",
+    "weedImage": "https://i.imgur.com/9QNX8HV.png",
+    "backgroundImage": "https://i.imgur.com/13cdIaG.png"
   },
   "@@editor": [
     {
@@ -14,15 +20,45 @@
       "source": "images.json",
       "fields": [
         {
-          "key": "playerImage",
-          "name": "Player Image",
-          "description": "Player image: https://imgur.com/a/ZqtyLY0",
+          "key": "hungryFaceImage",
+          "name": "Hungry Face Image",
+          "description": "Hungry Face image",
           "type": "image"
         },
         {
-          "key": "obstacleImage",
-          "name": "Obstacle Image",
-          "description": "Obstacle image",
+          "key": "fullFaceImage",
+          "name": "Full Face Image",
+          "description": "Full Face image",
+          "type": "image"
+        },
+        {
+          "key": "sickFaceImage",
+          "name": "Sick Face Image",
+          "description": "Sick Face image",
+          "type": "image"
+        },
+        {
+          "key": "foodImage1",
+          "name": "Food Image 1",
+          "description": "Food image",
+          "type": "image"
+        },
+        {
+          "key": "foodImage2",
+          "name": "Food Image 2",
+          "description": "Food image",
+          "type": "image"
+        },
+        {
+          "key": "foodImage3",
+          "name": "Food Image 3",
+          "description": "Food image",
+          "type": "image"
+        },
+        {
+          "key": "foodImage4",
+          "name": "Food Image 4",
+          "description": "Food image",
           "type": "image"
         },
         {

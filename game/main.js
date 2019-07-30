@@ -44,7 +44,8 @@ import {
     hashCode,
     randomBetween,
     bounded,
-    throttled
+    throttled,
+    pickFromList
 } from './utils/baseUtils.js';
 
 import {
@@ -62,7 +63,6 @@ import {
 import {
     Burst,
     BlastWave,
-    StarStream
 } from './objects/effects.js';
 
 import Player from './characters/player.js';
@@ -95,6 +95,7 @@ class Game {
         this.decrementLife = throttled(300, () => this.state.lives -= 1);
         this.throttledBlastWave = throttled(600, (bw) => new BlastWave(bw));
         this.throttledBurst = throttled(300, (br) => new Burst(br));
+        this.throttledPlayback = throttled(300, (key, buffer) => this.playback(key, buffer));
 
         // setup event listeners
         // handle keyboard events
@@ -202,13 +203,20 @@ class Game {
 
         // make a list of assets
         const gameAssets = [
-            loadImage('playerImage', this.config.images.playerImage),
-            loadImage('obstacleImage', this.config.images.obstacleImage),
-            loadImage('backgroundImage', this.config.images.backgroundImage),
+            loadImage('dizzyFaceImage', this.config.images.dizzyFaceImage),
+            loadImage('happyFaceImage', this.config.images.happyFaceImage),
+            loadImage('hungryFaceImage', this.config.images.hungryFaceImage),
+            loadImage('fullFaceImage', this.config.images.fullFaceImage),
+            loadImage('sickFaceImage', this.config.images.sickFaceImage),
+            loadImage('foodImage1', this.config.images.foodImage1),
+            loadImage('foodImage2', this.config.images.foodImage2),
+            loadImage('foodImage3', this.config.images.foodImage3),
+            loadImage('foodImage4', this.config.images.foodImage4),
+            loadImage('weedImage', this.config.images.weedImage),
+            loadImage('backgroundImage', this.config.images.backgroundImage, { optional: true }),
             loadSound('backgroundMusic', this.config.sounds.backgroundMusic),
-            loadSound('powerUpSound', this.config.sounds.powerUpSound),
-            loadSound('turnSound', this.config.sounds.turnSound),
-            loadSound('hitSound', this.config.sounds.hitSound),
+            loadSound('munchSound', this.config.sounds.munchSound),
+            loadSound('clearSound', this.config.sounds.clearSound),
             loadSound('gameOverSound', this.config.sounds.gameOverSound),
             loadFont('gameFont', this.config.settings.fontFamily)
         ];
@@ -231,12 +239,19 @@ class Game {
     create() {
         // create game characters
         const { top } = this.screen;
-        const { playerImage, obstacleImage } = this.images;
+        const {
+            dizzyFaceImage,
+            happyFaceImage,
+            hungryFaceImage,
+            fullFaceImage,
+            sickFaceImage,
+            foodImage1
+        } = this.images;
 
         // set player size
         let playerWidth = bounded(this.playerSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
         this.playerSize = resize({
-            image: playerImage,
+            image: dizzyFaceImage,
             width: playerWidth
         });
 
@@ -245,7 +260,14 @@ class Game {
 
         this.player = new Player({
             ctx: this.ctx,
-            image: playerImage,
+            image: dizzyFaceImage,
+            images: [
+                dizzyFaceImage,
+                happyFaceImage,
+                hungryFaceImage,
+                fullFaceImage,
+                sickFaceImage,
+            ],
             x: playerX,
             y: top,
             width: this.playerSize.width,
@@ -257,7 +279,7 @@ class Game {
         // set obstacle size
         let obstacleWidthOpen = bounded(this.obstacleSize * this.screen.scaleHeight, this.screen.minSize, this.screen.maxSize);
         this.obstacleSize = resize({
-            image: obstacleImage,
+            image: foodImage1,
             width: obstacleWidthOpen
         });
 
@@ -316,20 +338,6 @@ class Game {
             if (this.state.prev === 'ready') {
                 this.overlay.hide(['banner', 'button', 'instructions'])
 
-                // start star stream
-                this.effects.push(new StarStream({
-                    ctx: this.ctx,
-                    n: 200,
-                    x: [0, this.canvas.width],
-                    y: 0,
-                    vx: 0,
-                    vy: this.state.gameSpeed / 3, // game background speed
-                    rd: [2, 6],
-                    color: this.config.colors.starStreamColor
-                }))
-
-                // power up sound
-                this.playback('powerUpSound', this.sounds.powerUpSound);
                 this.setState({ current: 'play' });
             }
 
@@ -345,10 +353,9 @@ class Game {
 
 
             // add an obstacle
-            let shouldAddObstacle = this.frame.count % 120 === 0 || // 2 seconds have gone by
-            this.entities.length < Math.min(this.frame.count / 300, 6); // less than some number of obstacles ( max is 6 )
-
-            if (shouldAddObstacle) {
+            let munchTime = this.frame.count % 600 === 0;
+            let shouldAddObstacle = this.entities.length < 6; // less than some number of obstacles ( max is 6 )
+            if (munchTime || shouldAddObstacle) {
                 // pick a location
                 let location = {
                     x: randomBetween(0, this.screen.right - this.obstacleSize.width, true),
@@ -361,17 +368,41 @@ class Game {
                 });
 
 
-                if (!inValidLocation) {
+                // add food
+                if (!inValidLocation && !munchTime) {
                     // add new obstacle
-                    let { obstacleImage } = this.images;
+                    let {foodImage1, foodImage2, foodImage3, foodImage4 } = this.images;
                     let obstacleSize = resize({
-                        image: obstacleImage,
+                        image: foodImage1,
                         width: this.obstacleSize.width
                     });
 
                     this.entities.push(new Obstacle({
                         ctx: this.ctx,
-                        image: obstacleImage,
+                        type: 'food',
+                        image: pickFromList([foodImage1, foodImage2, foodImage3, foodImage4]),
+                        x: location.x,
+                        y: location.y,
+                        width: obstacleSize.width,
+                        height: obstacleSize.height,
+                        speed: this.state.gameSpeed,
+                        bounds: this.screen
+                    }))
+                }
+
+                // munch time
+                if (!inValidLocation && munchTime) {
+                    // munch time
+                    let { weedImage } = this.images;
+                    let obstacleSize = resize({
+                        image: weedImage,
+                        width: this.obstacleSize.width
+                    });
+
+                    this.entities.push(new Obstacle({
+                        ctx: this.ctx,
+                        type: 'weed',
+                        image: weedImage,
                         x: location.x,
                         y: location.y,
                         width: obstacleSize.width,
@@ -405,86 +436,75 @@ class Game {
                 // check for player collisions
                 if (collideDistance(entity, this.player)) {
                     // handle collision
-
-                    this.player.eat();
-
-                    // blast effect
-                    let blastWave = this.throttledBlastWave({
-                        ctx: this.ctx,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        color: this.config.colors.blastWaveColor
+                    entity.munch();
+                    
+                    // add points & increase game speed
+                    this.setState({
+                        score: this.state.score + 1,
+                        gameSpeed: this.state.gameSpeed + 0.1
                     });
 
-                    if (blastWave) {
-                        this.effects.push(blastWave);
+                    // eat
+                    if (entity.type === 'food') {
+                        this.player.eat();
+                        this.throttledPlayback('munchSound', this.sounds.munchSound);
 
-                        this.playback('hitSound', this.sounds.hitSound);
+                        this.effects.push(
+                            new Burst({
+                                ctx: this.ctx,
+                                image: entity.image,
+                                n: 1,
+                                x: [this.player.x, this.player.x + this.player.width],
+                                y: [this.player.y, this.player.y + this.player.height],
+                                vx: [-5, 5],
+                                vy: [-10, 1],
+                                burnRate: 0.025
+                            })
+                        );
                     }
+
+                    // blaze
+                    if (entity.type === 'weed') {
+                        this.player.blaze();
+                        this.throttledPlayback('clearSound', this.sounds.clearSound);
+
+                        this.effects.push(
+                            new Burst({
+                                ctx: this.ctx,
+                                image: entity.image,
+                                n: 20,
+                                x: [this.player.x, this.player.x + this.player.width],
+                                y: [this.player.y, this.player.y + this.player.height],
+                                vx: [-5, 5],
+                                vy: [-10, 1],
+                                burnRate: 0.01
+                            })
+                        );
+                    }
+
                 }
 
                 // remove in-active entity
-                if (entity.y > this.canvas.height) {
+                if (entity.y > this.canvas.height || entity.munches > 5) {
                     this.entities.splice(i, 1);
-
-                    // add points
-                    // increase game speed
-                    this.setState({
-                        score: Math.floor(this.state.score + (this.state.gameSpeed / 20)),
-                        gameSpeed: this.state.gameSpeed + 0.1 
-                    });
                 }
                 
             }
 
 
             // check for game over
-            if (this.state.lives < 1) {
+            if (this.player.width > this.canvas.width / 2) {
                 // big explosion
                 this.effects.push(
-                    new BlastWave({
-                        ctx: this.ctx,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        width: 300,
-                        color: this.config.colors.blastWaveColor,
-                        burnRate: [200, 300]
-                    }),
-                    new BlastWave({
-                        ctx: this.ctx,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        width: 150,
-                        color: this.config.colors.blastWaveColor,
-                        burnRate: [100, 200]
-                    }),
-                    new BlastWave({
-                        ctx: this.ctx,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        width: 20,
-                        color: this.config.colors.blastWaveColor,
-                        burnRate: [50, 100]
-                    }),
                     new Burst({
                         ctx: this.ctx,
-                        n: 100,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        vx: [-50, 50],
-                        vy: [-5, 5],
-                        color: this.config.colors.burstColor,
-                        burnRate: 0.05
-                    }),
-                    new Burst({
-                        ctx: this.ctx,
-                        n: 25,
-                        x: this.player.cx,
-                        y: this.player.cy,
-                        vx: [-6, 6],
-                        vy: [-60, 60],
-                        color: this.config.colors.burstColor,
-                        burnRate: 0.025
+                        image: this.images.weedImage,
+                        n: 200,
+                        x: [this.player.x, this.player.x + this.player.width],
+                        y: [this.player.y, this.player.y + this.player.height],
+                        vx: [-5, 5],
+                        vy: [-10, 1],
+                        burnRate: 0.01
                     })
                 );
 

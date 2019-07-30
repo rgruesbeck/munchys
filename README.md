@@ -1,13 +1,11 @@
-# Vertical
+# Munchies
 
-A vertical obstacle game.
+A vertical munchie game.
 
 # VCC's
 
 - 🎮 Change the text and game settings
     * [Open configuration](#~/.koji/customization/settings.json!visual)
-- 🎮 Set open style game play settings player size obstacle size.
-    * [Open configuration](#~/.koji/customization/openplay.json!visual)
 - 🖼️ Replace the player, background and more
     * [Open configuration](#~/.koji/customization/images.json!visual)
 - 🔈 Change the sounds and background music.
@@ -55,3 +53,9 @@ If you need any help, you can ask the community by [making a post](https://gokoj
 ### Helpful Resources
 - [Mozilla Game Development Docs](https://developer.mozilla.org/en-US/docs/Games).
 - [HTML5 Game Devs Forum](http://www.html5gamedevs.com/).
+
+### TODO
+- fix collision
+- glowing pizza
+- fix double background track
+- background resize
