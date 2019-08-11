@@ -11,45 +11,64 @@
     "starStreamColor": "#fae467",
     "backgroundColor": "#080e32"
   },
-  "@@editor": [
-    {
-      "key": "colors",
-      "name": "Colors",
-      "icon": "💅",
-      "source": "colors.json",
-      "fields": [
-        {
-          "key": "textColor",
-          "name": "Text color",
-          "description": "Default color for text",
-          "type": "color"
-        },
-        {
-          "key": "primaryColor",
-          "name": "Primary Color",
-          "type": "color"
-        },
-        {
-          "key": "burstColor",
-          "name": "Burst Color",
-          "type": "color"
-        },
-        {
-          "key": "blastWaveColor",
-          "name": "Blast Wave Color",
-          "type": "color"
-        },
-        {
-          "key": "starStreamColor",
-          "name": "Star Stream Color",
-          "type": "color"
-        },
-        {
-          "key": "backgroundColor",
-          "name": "Background color",
-          "type": "color"
-        }
-      ]
-    }
-  ]
+  "@@editor": [{
+    "key": "colors",
+    "name": "Colors",
+    "icon": "💅",
+    "source": "colors.json",
+    "fields": [{
+        "key": "textColor",
+        "name": "Text color",
+        "description": "Default color for text",
+        "type": "color"
+      },
+      {
+        "key": "lightTextColor",
+        "name": "Light Text color",
+        "description": "Default color for light text",
+        "type": "color"
+      },
+      {
+        "key": "darkTextColor",
+        "name": "Dark Text color",
+        "description": "Default color for dark text",
+        "type": "color"
+      },
+      {
+        "key": "primaryColor",
+        "name": "Primary Color",
+        "type": "color"
+      },
+      {
+        "key": "secondaryColor",
+        "name": "Secondary Color",
+        "type": "color"
+      },
+      {
+        "key": "tertiaryColor",
+        "name": "Tertiary Color",
+        "type": "color"
+      },
+      {
+        "key": "burstColor",
+        "name": "Burst Color",
+        "type": "color"
+      },
+      {
+        "key": "blastWaveColor",
+        "name": "Blast Wave Color",
+        "type": "color"
+      },
+      {
+        "key": "starStreamColor",
+        "name": "Star Stream Color",
+        "type": "color"
+      },
+      {
+        "key": "backgroundColor",
+        "name": "Background color",
+        "type": "color"
+      }
+    ]
+  }]
 }
