@@ -537,10 +537,10 @@ class Game {
                 
             }
 
-            if (this.effects.length < 60) {
+            setTimeout(() => {
                 window.setScore(this.state.score);
                 window.setAppView('setScore');
-            }
+            }, 1000);
 
         }
 
