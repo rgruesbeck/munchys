@@ -1,7 +1,11 @@
 {
   "colors": {
     "textColor": "#ffc70d",
+    "lightTextColor": "#ffffff",
+    "darkTextColor": "#080e32",
     "primaryColor": "#37289f",
+    "secondaryColor": "#080e32",
+    "tertiaryColor": "#7064ac",
     "burstColor": "#5000ff",
     "blastWaveColor": "#ffc70d",
     "starStreamColor": "#fae467",
