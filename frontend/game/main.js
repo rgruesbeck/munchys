@@ -111,9 +111,6 @@ class Game {
         window.addEventListener('resize', () => this.handleResize());
         window.addEventListener("orientationchange", (e) => this.handleResize(e));
 
-        // restart game loop after tab unfocused
-        // window.addEventListener('blur', () => this.requestFrame(() => this.play()));
-        
         // handle koji config changes
         Koji.on('change', (scope, key, value) => {
             this.config[scope][key] = value;
@@ -769,8 +766,17 @@ class Game {
     }
 
     destroy() {
+        // stop game loop and music
         this.setState({ current: 'stop' })
         this.stopPlaylist();
+
+        // cleanup event listeners
+        document.addEventListener('keydown', this.handleKeyboardInput);
+        document.addEventListener('keyup', this.handleKeyboardInput);
+        document.addEventListener('touchstart', this.handleTap);
+        this.overlay.root.addEventListener('click', this.handleClicks);
+        window.addEventListener('resize', this.handleResize);
+        window.addEventListener("orientationchange", this.handleResize);
     }
 }
 
