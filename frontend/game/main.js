@@ -771,12 +771,12 @@ class Game {
         this.stopPlaylist();
 
         // cleanup event listeners
-        document.addEventListener('keydown', this.handleKeyboardInput);
-        document.addEventListener('keyup', this.handleKeyboardInput);
-        document.addEventListener('touchstart', this.handleTap);
-        this.overlay.root.addEventListener('click', this.handleClicks);
-        window.addEventListener('resize', this.handleResize);
-        window.addEventListener("orientationchange", this.handleResize);
+        document.removeEventListener('keydown', this.handleKeyboardInput);
+        document.removeEventListener('keyup', this.handleKeyboardInput);
+        document.removeEventListener('touchstart', this.handleTap);
+        this.overlay.root.removeEventListener('click', this.handleClicks);
+        window.removeEventLiser('resize', this.handleResize);
+        window.removeEventLiser("orientationchange", this.handleResize);
     }
 }
 
