@@ -21,6 +21,8 @@ class Leaderboard extends Component {
   }
 
   componentDidMount() {
+    console.log('leaderboard view');
+
     fetch(`${Koji.config.serviceMap.backend}/leaderboard`)
       .then((response) => response.json())
       .then(({ scores }) => {

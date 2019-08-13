@@ -122,6 +122,10 @@ class Overlay {
         this.container.style.fontFamily = this.styles.fontFamily;
         this.button.style.backgroundColor = this.styles.primaryColor;
     }
+
+    destroy() {
+        // this.root.style.display = 'none';
+    }
 }
 
 export default Overlay;

@@ -71,8 +71,9 @@ import { collideDistance } from './utils/spriteUtils.js';
 
 class Game {
 
-    constructor(canvas, overlay, topbar, config) {
+    constructor(canvas, container, overlay, topbar, config) {
         this.config = config; // customization
+        this.container = container; // container
         this.overlay = overlay; // overlay
 
         // set topbar
@@ -637,7 +638,7 @@ class Game {
 
     handleResize() {
 
-        document.location.reload();
+        // document.location.reload();
     }
 
     // method:pause pause game
@@ -733,7 +734,8 @@ class Game {
 
     // reset game
     reset() {
-        document.location.reload();
+
+        // document.location.reload();
     }
 
     // update game state
@@ -775,8 +777,13 @@ class Game {
         document.removeEventListener('keyup', this.handleKeyboardInput);
         document.removeEventListener('touchstart', this.handleTap);
         this.overlay.root.removeEventListener('click', this.handleClicks);
-        window.removeEventLiser('resize', this.handleResize);
-        window.removeEventLiser("orientationchange", this.handleResize);
+        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener("orientationchange", this.handleResize);
+
+        // cleanup nodes
+        while (this.container.firstChild) {
+            this.container.removeChild(this.container.firstChild);
+        }
     }
 }
 

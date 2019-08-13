@@ -39,8 +39,6 @@ class SetScore extends Component {
 		setTimeout(function(){
 			this.nameInput.focus();
 		}.bind(this), 100);
-		
-		console.log(Koji.config);
 	}
 
 	handleClose = () => {
