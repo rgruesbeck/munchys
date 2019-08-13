@@ -71,9 +71,8 @@ import { collideDistance } from './utils/spriteUtils.js';
 
 class Game {
 
-    constructor(canvas, container, overlay, topbar, config) {
+    constructor(canvas, overlay, topbar, config) {
         this.config = config; // customization
-        this.container = container; // container
         this.overlay = overlay; // overlay
 
         // set topbar
@@ -781,9 +780,8 @@ class Game {
         window.removeEventListener("orientationchange", this.handleResize);
 
         // cleanup nodes
-        while (this.container.firstChild) {
-            this.container.removeChild(this.container.firstChild);
-        }
+       delete this.overlay;
+       delete this.canvas;
     }
 }
 
